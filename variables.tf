@@ -1,6 +1,4 @@
-variable "project_id" {
-  default = "me-playground"
-}
+variable "project_id" {}
 
 variable "region" {
   default = "europe-west3"

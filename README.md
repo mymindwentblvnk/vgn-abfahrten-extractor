@@ -2,7 +2,7 @@
 
 The VGN Departure Extractor is a data pipeline that
 extracts departure information from Nuremberg's
-public transport company. The whole pipeline can
+public transport company VGN. The whole pipeline can
 easily be deployed to Google Cloud Platform (GCP) with
 Terraform.
 
@@ -17,13 +17,13 @@ Service Account with the role _Owner_. Export a Key as JSON file
 and refer it in the following environment variables.
 
 ```bash
-$ export TF_VAR_credentials_file=path/to/service/account.json
-$ export TF_VAR_project_id=my-gcp-project
+export TF_VAR_credentials_file=path/to/service/account.json
+export TF_VAR_project_id=my-gcp-project
 ```
 
 ```bash
-$ terraform init
-$ terraform validate
-$ terraform plan
-$ terraform apply
+terraform init
+terraform validate
+terraform plan
+terraform apply
 ```

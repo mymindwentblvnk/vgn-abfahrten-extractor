@@ -13,7 +13,8 @@ The resulting architecture looks like this.
 ## Deployment
 
 You need a GCP project with billing enabled. Also create a
-Service Account with the role _Owner_.
+Service Account with the role _Owner_. Export a Key as JSON file
+and refer it in the following environment variables.
 
 ```bash
 $ export TF_VAR_credentials_file=path/to/service/account.json

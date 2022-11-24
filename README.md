@@ -27,3 +27,6 @@ terraform validate
 terraform plan
 terraform apply
 ```
+
+After `terraform apply` was executed successfully, the pipeline
+is executing automatically as defined in the Cloud Schedule (see [main.tf](main.tf)).

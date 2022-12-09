@@ -23,13 +23,10 @@ def generate_extract_url(halt_id: str) -> str:
     return EXTRACT_URL_PATTERN + halt_id if EXTRACT_URL_PATTERN.endswith('/') else f'{EXTRACT_URL_PATTERN}/{halt_id}'
 
 
-def generate_file_name(now, halt_id):
+def generate_file_name(now, halt_id, extraction_id):
     day = ("0" + str(now.day))[-2:]
     month = ("0" + str(now.month))[-2:]
-    hours = ("0" + str(now.hour))[-2:]
-    minutes = ("0" + str(now.minute))[-2:]
-    seconds = ("0" + str(now.second))[-2:]
-    return f'{now.year}/{month}/{day}/{halt_id}-{hours}{minutes}{seconds}.json'
+    return f'{now.year}/{month}/{day}/{extraction_id}-{halt_id}.json'
 
 
 @functions_framework.http
@@ -37,11 +34,12 @@ def main(request):
     json = request.get_json(force=True)
     bucket_name = json['bucket_name']
     halt_id = json['halt_id']
+    extraction_id = json['extraction_id']
 
     if halt_id and bucket_name:
         now = datetime.now()
         extract_url = generate_extract_url(halt_id)
-        file_name = generate_file_name(now, halt_id)
+        file_name = generate_file_name(now, halt_id, extraction_id)
         departures_json = get_content(extract_url)
         upload_to_cloud_storage(bucket_name, file_name, departures_json)
     return 'True'

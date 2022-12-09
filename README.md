@@ -1,8 +1,8 @@
 # VGN Departure Extractor
 
-The VGN Departure Extractor is a data pipeline that
+The **VGN Departure Extractor** is a data pipeline that
 extracts departure information from Nuremberg's
-public transport company VGN and saves it to Google Cloud Storage.
+public transport company [VGN](https://www.vgn.de/) and saves it to Google Cloud Storage.
 The whole pipeline can easily be deployed to Google Cloud
 Platform (GCP) with Terraform.
 

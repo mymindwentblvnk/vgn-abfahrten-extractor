@@ -1,5 +1,6 @@
 import json
 import os
+import uuid
 from typing import List
 
 import functions_framework
@@ -14,7 +15,7 @@ CLOUD_TASKS_QUEUE_REGION = os.environ['CLOUD_TASKS_QUEUE_REGION']
 GCP_PROJECT_ID = os.environ['GCP_PROJECT_ID']
 
 
-def enqueue_halt_ids(halt_ids: List[str]):
+def enqueue_halt_ids(halt_ids: List[str], extraction_id: str):
     client = tasks_v2.CloudTasksClient()
     parent = client.queue_path(GCP_PROJECT_ID, CLOUD_TASKS_QUEUE_REGION, CLOUD_TASKS_QUEUE_NAME)
     for halt_id in halt_ids:
@@ -22,7 +23,7 @@ def enqueue_halt_ids(halt_ids: List[str]):
             'http_request': {
                 'http_method': tasks_v2.HttpMethod.POST,
                 'url': EXTRACT_DEPARTURES_URL,
-                'body': json.dumps({'bucket_name': BUCKET_NAME, 'halt_id': halt_id}).encode(),
+                'body': json.dumps({'bucket_name': BUCKET_NAME, 'halt_id': halt_id, 'extraction_id': extraction_id}).encode(),
                 "oidc_token": {
                     'service_account_email': SERVICE_ACCOUNT_EMAIL,
                 },
@@ -34,8 +35,9 @@ def enqueue_halt_ids(halt_ids: List[str]):
 @functions_framework.http
 def main(request):
     import csv
+    extraction_id = str(uuid.uuid4())
     with open('haltestellen.csv', 'r') as haltestellen_csv:
         reader = csv.DictReader(haltestellen_csv)
         halt_ids = {row['VGNKennung'] for row in reader if row['Betriebszweig'] == 'U-Bahn'}
-    enqueue_halt_ids(halt_ids)
+    enqueue_halt_ids(halt_ids, extraction_id)
     return 'True'

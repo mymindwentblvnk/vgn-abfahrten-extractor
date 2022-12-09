@@ -42,4 +42,5 @@ def main(request):
         file_name = generate_file_name(now, halt_id, extraction_id)
         departures_json = get_content(extract_url)
         upload_to_cloud_storage(bucket_name, file_name, departures_json)
+        print(f"Uploaded {file_name} to bucket {bucket_name} for extraction with id {extraction_id}.")
     return 'True'

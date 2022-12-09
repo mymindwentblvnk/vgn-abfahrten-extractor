@@ -40,4 +40,5 @@ def main(request):
         reader = csv.DictReader(haltestellen_csv)
         halt_ids = {row['VGNKennung'] for row in reader if row['Betriebszweig'] == 'U-Bahn'}
     enqueue_halt_ids(halt_ids, extraction_id)
+    print(f"Enqueued Cloud Tasks queue {CLOUD_TASKS_QUEUE_NAME} with {len(halt_ids)} halt IDs for extraction with id {extraction_id}.")
     return 'True'

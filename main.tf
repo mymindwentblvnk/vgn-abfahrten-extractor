@@ -182,7 +182,7 @@ resource "google_cloud_tasks_queue" "vgn_departures_queue" {
 resource "google_cloud_scheduler_job" "trigger_vgn_departure_extraction" {
   name        = "trigger-vgn-departure-extraction"
   description = "Trigger extraction of VGN departures every 5 minutes"
-  schedule    = "*/5 5-9 * * 1-5"
+  schedule    = "*/3 5-9 * * 1-5"
   time_zone   = "Europe/Berlin"
   http_target {
     http_method = "GET"

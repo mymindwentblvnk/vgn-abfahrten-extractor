@@ -63,6 +63,27 @@ resource "google_project_iam_member" "storage_object_creator_role" {
   ]
 }
 
+# ######## #
+# BigQuery #
+# ######## #
+resource "google_bigquery_table" "gcs_external_table" {
+  dataset_id  = "raw"
+  table_id    = "ext_vgn_departures"
+  description = "External BigQuery table on the extracted API responses about VGN departures."
+
+  external_data_configuration {
+    autodetect                = true
+    source_format             = "NEWLINE_DELIMITED_JSON"
+    hive_partitioning_options {
+      source_uri_prefix        = "gs://vgn-departures-archive/"
+      require_partition_filter = false
+    }
+    source_uris = [
+      "gs://vgn-departures-archive/*"
+    ]
+  }
+}
+
 # ############# #
 # Cloud Storage #
 # ############# #
@@ -83,13 +104,13 @@ resource "google_storage_bucket" "vgn_departures_functions" {
 
 data "archive_file" "enqueue_halt_ids_src" {
   type        = "zip"
-  source_dir  = "src/enqueue_halt_ids"
+  source_dir  = "departure_extractor/enqueue_halt_ids"
   output_path = "generated/enqueue_halt_ids.zip"
 }
 
 data "archive_file" "extract_departures_src" {
   type        = "zip"
-  source_dir  = "src/extract_departures"
+  source_dir  = "departure_extractor/extract_departures"
   output_path = "generated/extract_departures.zip"
 }
 

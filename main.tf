@@ -70,13 +70,15 @@ resource "google_bigquery_table" "gcs_external_table" {
   dataset_id  = "raw"
   table_id    = "ext_vgn_departures"
   description = "External BigQuery table on the extracted API responses about VGN departures."
+  deletion_protection = "false"
 
   external_data_configuration {
-    autodetect                = true
+    autodetect                = "true"
     source_format             = "NEWLINE_DELIMITED_JSON"
     hive_partitioning_options {
-      source_uri_prefix        = "gs://vgn-departures-archive/"
-      require_partition_filter = false
+      mode = "CUSTOM"
+      source_uri_prefix        = "gs://vgn-departures-archive/{year:INTEGER}/{month:INTEGER}/{day:INTEGER}"
+      require_partition_filter = "false"
     }
     source_uris = [
       "gs://vgn-departures-archive/*"

@@ -24,9 +24,7 @@ def generate_extract_url(halt_id: str) -> str:
 
 
 def generate_file_name(now, halt_id, extraction_id):
-    day = ("0" + str(now.day))[-2:]
-    month = ("0" + str(now.month))[-2:]
-    return f'{now.year}/{month}/{day}/{extraction_id}-{halt_id}.json'
+    return f'year={now.year}/month={now.month}/day={now.day}/{extraction_id}-{halt_id}.json'
 
 
 @functions_framework.http

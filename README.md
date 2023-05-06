@@ -2,7 +2,9 @@
 
 The **VGN Departure Extractor** is a data pipeline that
 extracts departure information from Nuremberg's
-public transport company [VGN](https://www.vgn.de/) and saves it to Google Cloud Storage.
+public transport company [VGN](https://www.vgn.de/) and saves
+it to Google Cloud Storage which is then read by an
+external BigQuery table.
 The whole pipeline can easily be deployed to Google Cloud
 Platform (GCP) with Terraform.
 
@@ -11,8 +13,9 @@ Platform (GCP) with Terraform.
 GCP resources used in this are
 [Cloud Scheduler](https://cloud.google.com/scheduler),
 [Cloud Functions](https://cloud.google.com/functions),
-[Cloud Tasks](https://cloud.google.com/tasks), and
-[Cloud Storage](https://cloud.google.com/storage).
+[Cloud Tasks](https://cloud.google.com/tasks),
+[Cloud Storage](https://cloud.google.com/storage), and
+[BigQuery](https://cloud.google.com/bigquery).
 
 ![Data Pipeline Architecture](docu/pictures/pipeline.jpg)
 

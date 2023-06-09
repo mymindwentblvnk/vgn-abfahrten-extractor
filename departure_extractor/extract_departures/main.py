@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+from json import JSONDecodeError
 
 import functions_framework
 import requests
@@ -10,7 +11,12 @@ EXTRACT_URL_PATTERN = os.environ['EXTRACT_URL_PATTERN']
 
 def get_content(extract_url: str) -> str:
     if extract_url:
-        return requests.get(url=extract_url).text
+        response = requests.get(url=extract_url)
+        try:
+            response.json()  # Nasty check, if content is parsable JSON
+            return response.text
+        except requests.exceptions.JSONDecodeError:
+            pass
 
 
 def upload_to_cloud_storage(bucket_name: str, file_name: str, content: str):

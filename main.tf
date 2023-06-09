@@ -73,15 +73,139 @@ resource "google_bigquery_table" "gcs_external_table" {
   deletion_protection = "false"
 
   external_data_configuration {
-    autodetect                = "true"
+    ignore_unknown_values     = "true"
+    autodetect                = "false"
+    schema                    = <<EOF
+[
+        {
+            "name": "Abfahrten",
+            "type": "RECORD",
+            "mode": "REPEATED",
+            "fields": [
+                {
+                    "name": "Prognose",
+                    "type": "BOOLEAN",
+                    "mode": "NULLABLE"
+                },
+                {
+                    "name": "Fahrtnummer",
+                    "type": "STRING",
+                    "mode": "NULLABLE"
+                },
+                {
+                    "name": "Fahrtartnummer",
+                    "type": "STRING",
+                    "mode": "NULLABLE"
+                },
+                {
+                    "name": "Latitude",
+                    "type": "FLOAT",
+                    "mode": "NULLABLE"
+                },
+                {
+                    "name": "Longitude",
+                    "type": "FLOAT",
+                    "mode": "NULLABLE"
+                },
+                {
+                    "name": "HaltesteigText",
+                    "type": "STRING",
+                    "mode": "NULLABLE"
+                },
+                {
+                    "name": "AbfahrtszeitIst",
+                    "type": "TIMESTAMP",
+                    "mode": "NULLABLE"
+                },
+                {
+                    "name": "AbfahrtszeitSoll",
+                    "type": "TIMESTAMP",
+                    "mode": "NULLABLE"
+                },
+                {
+                    "name": "Fahrzeugnummer",
+                    "type": "STRING",
+                    "mode": "NULLABLE"
+                },
+                {
+                    "name": "Richtungstext",
+                    "type": "STRING",
+                    "mode": "NULLABLE"
+                },
+                {
+                    "name": "Besetzgrad",
+                    "type": "STRING",
+                    "mode": "NULLABLE"
+                },
+                {
+                    "name": "Richtung",
+                    "type": "STRING",
+                    "mode": "NULLABLE"
+                },
+                {
+                    "name": "Produkt",
+                    "type": "STRING",
+                    "mode": "NULLABLE"
+                },
+                {
+                    "name": "Haltepunkt",
+                    "type": "STRING",
+                    "mode": "NULLABLE"
+                },
+                {
+                    "name": "Linienname",
+                    "type": "STRING",
+                    "mode": "NULLABLE"
+                }
+            ]
+    },
+    {
+        "name": "VAGKennung",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "Haltestellenname",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "VGNKennung",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "Metadata",
+        "type": "RECORD",
+        "mode": "NULLABLE",
+        "fields": [
+            {
+                "name": "Timestamp",
+                "type": "TIMESTAMP",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "Version",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            }
+        ]
+    },
+    {
+      "name": "Sonderinformationen",
+      "type": "STRING",
+      "mode": "REPEATED"
+    }
+]
+EOF
     source_format             = "NEWLINE_DELIMITED_JSON"
     hive_partitioning_options {
       mode = "CUSTOM"
-      source_uri_prefix        = "gs://vgn-departures-archive/{year:INTEGER}/{month:INTEGER}/{day:INTEGER}"
+      source_uri_prefix        = "gs://${google_storage_bucket.vgn_departures_archive.name}/{year:INTEGER}/{month:INTEGER}/{day:INTEGER}"
       require_partition_filter = "false"
     }
     source_uris = [
-      "gs://vgn-departures-archive/*"
+      "gs://${google_storage_bucket.vgn_departures_archive.name}/*"
     ]
   }
 }
